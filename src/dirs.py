@@ -20,7 +20,8 @@ def apply_rules(name, root, conf):
 def match_points(match, exact_points, non_exact_points):
     points = 0
     # Char to the left of the inputed NAME string
-    left_char = match[len(match) - 2][len(match[len(match) - 2]) - 1]
+    left_string = match[len(match) - 2]
+    left_char = left_string[len(match[len(match) - 2]) - 1] if len(left_string) > 0 else ''
     # Char to the right of the inputed NAME string
     right_char = match[len(match) - 1][0] if len(match[len(match) - 1]) > 0 else ''
     if left_char == '/' and right_char == '':
