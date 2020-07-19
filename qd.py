@@ -13,9 +13,7 @@ def show_usage():
 def main():
     help_args = ['--help', '-h']
     if len(sys.argv) == 2 and sys.argv[1] not in help_args: # Check for argument
-        get_dirs(sys.argv[1])
-        conf = get_config()
-        print(conf.root, conf.hidden, conf.include, conf.exclude)
+        get_dirs(sys.argv[1], get_config())
     else:
         show_usage()
         sys.exit(1)
@@ -23,4 +21,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

@@ -1,8 +1,8 @@
 """
- 
+
  # Quick Change Directory config options:
  ** The config file is located at ~/.qd_config **
- 
+
  Options:
   - qd root path:       root=/path/to/root/ (Only one path should be specified here!)
   - Allow .dirs:        hidden_dirs=y |OR| hidden_dirs=n
@@ -75,4 +75,3 @@ def get_config():
     except FileNotFoundError:
         print('No config file...')
     return conf
-
