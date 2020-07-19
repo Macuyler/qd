@@ -8,7 +8,11 @@
   - Allow .dirs:        hidden_dirs=y |OR| hidden_dirs=n
   - Include paths:      include=[exact_name,/path/to/directory/]
   - Exclude paths:      exclude=[exact_name,/path/to/directory/]
-  (For Include and Exclude, you can specify as many paths and names as nessecary each separated by a comma. Make sure that a path is absolute and ends with a "/". Names have to be exact matches so excluding [node_modules] will exclude /home/node_modules/ but not /home/node_modules_folder/.)
+
+(For Include and Exclude you can specify as many paths or names as you want, each separated by a comma.
+ These items will be run against each path listing so be careful when using vague paths, for example:
+ Using "exclude=[school]" to block your /home/Documents/school/ directory will also block your /home/Desktop/school/ directory.
+ A better way to solve the problem above would be to use "exclude=[/home/Documents/school/]" instead.)
 
  Defaults:
     root=/path/to/your/home/dir/
@@ -20,6 +24,15 @@
 
 from pathlib import Path
 
+class Config:
+    def __init__(self, root='/', hidden=False, include=[], exclude=[]):
+        self.root = root
+        self.hidden = hidden
+        self.include = include
+        self.exclude = exclude
+        return
+
+
 DECLARE_ROOT = 'root='
 DECLARE_HIDDEN = 'hidden_dirs='
 DECLARE_INCLUDE = 'include=['
@@ -30,24 +43,20 @@ def get_root(line):
     return root.strip()
 
 def get_hidden(line):
-    hidden = False
-    return hidden
+    yesses = ['y', 'yes', 't', 'true', 'on']
+    value = line.replace(DECLARE_HIDDEN, '').strip().lower()
+    return value in yesses
+
+def get_items(string):
+    return string.split(']')[0].split(',')
 
 def get_include(line):
-    include = []
-    return include
+    return get_items(line.replace(DECLARE_INCLUDE, '').strip())
 
+# TODO: Add [...] syntax to allow appending items to default list
 def get_exclude(line):
-    exclude = []
-    return exclude
+    return get_items(line.replace(DECLARE_EXCLUDE, '').strip())
 
-class Config:
-    def __init__(self, root='/', hidden=False, include=[], exclude=[]):
-        self.root = root
-        self.hidden = hidden
-        self.include = include
-        self.exclude = exclude
-        return
 
 def get_config():
     home = str(Path.home())

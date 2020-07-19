@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import sys
+from src.config import get_config
+from src.dirs import get_dirs
 
-def get_dirs(name):
-    return
 
 def show_usage():
     print('\n  *** qd usage:')
@@ -14,6 +14,8 @@ def main():
     help_args = ['--help', '-h']
     if len(sys.argv) == 2 and sys.argv[1] not in help_args: # Check for argument
         get_dirs(sys.argv[1])
+        conf = get_config()
+        print(conf.root, conf.hidden, conf.include, conf.exclude)
     else:
         show_usage()
         sys.exit(1)
