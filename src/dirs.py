@@ -79,4 +79,5 @@ def get_dirs(name, conf, results=8):
                 if points > 0:
                     points += dist_points(path)
                     add_score(path, points)
-    return sorted(scores.items(), key=lambda item: -item[1])[:results]
+    dirs = sorted(scores.items(), key=lambda item: -item[1])[:results]
+    return list(map(lambda x: x[0], dirs))

@@ -1,11 +1,8 @@
-#File for curses display
 import curses
-from config import get_config
+from pathlib import Path
 
-root = get_config().root
-test_paths = ['/home/mythical/rust', '/home/mythical/rusty', '/home/mythical/rust/rust']
-
-def start_display(paths):
+def start_display(paths, conf):
+    root = conf.root
     clean_paths = []
     for p in paths:
         clean_paths.append(f"\t{p.replace(root, '')}")
@@ -18,7 +15,6 @@ def start_display(paths):
 
     def clear_string(index):
         if index < len(paths):
-            # line = paths[index].replace(">", "")
             stdscr.addstr(index, 0,clean_paths[index])
 
     def select_string(index):
@@ -60,7 +56,8 @@ def start_display(paths):
         elif key == 10:
             curses.endwin()
             quit = True
-            # open('path.txt', 'w').write(paths[current_location].replace("\t", ""))
+            home = str(Path.home())
+            open(f'{home}/.qd_path', 'w').write(paths[current_location])
         elif key == ord('q'):
             quit = True
 

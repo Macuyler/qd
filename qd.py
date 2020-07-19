@@ -3,6 +3,7 @@
 import sys
 from src.config import get_config
 from src.dirs import get_dirs
+from src.cli import start_display
 
 
 def show_usage():
@@ -13,7 +14,9 @@ def show_usage():
 def main():
     help_args = ['--help', '-h']
     if len(sys.argv) == 2 and sys.argv[1] not in help_args: # Check for argument
-        get_dirs(sys.argv[1], get_config())
+        conf = get_config()
+        dirs = get_dirs(sys.argv[1], conf)
+        start_display(dirs, conf)
     else:
         show_usage()
         sys.exit(1)
