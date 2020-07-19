@@ -10,6 +10,11 @@ def apply_rules(name, root, conf):
         r = False
     if (not conf.hidden and name[0] == '.'):
         r = False
+    for e in conf.include:
+        if path in e:
+            r = True
+    if name in conf.include:
+        r = True
     return r
 
 def get_dirs(name, conf):
