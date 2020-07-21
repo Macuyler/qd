@@ -8,9 +8,8 @@ def start_display(paths, conf):
         curses.cbreak()
         stdscr.keypad(1)
 
-        term_y, term_x = stdscr.getmaxyx() #get termianl x and y
-
-        #Add curses color pairs:
+        #get terminal x and y
+        term_y, term_x = stdscr.getmaxyx()
 
         current_location = 0
 
@@ -128,3 +127,5 @@ def start_display(paths, conf):
 
     else:
         print("NO PATHS FOUND")
+        sys.exit(1)
+        #exit code is needed so that cd command does not issue into last qd path
