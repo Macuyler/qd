@@ -1,4 +1,4 @@
 #!/bin/bash
 touch ~/.qd_path
-qd.py "$1" && \
+qd.py $@ && \
 cd "$(cat ~/.qd_path)"
