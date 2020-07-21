@@ -2,5 +2,4 @@
 
 touch ~/.qd_path
 qd.py $1 && \
-cd $(cat ~/.qd_path)
-
+cd "$(cat ~/.qd_path)"
