@@ -1,6 +1,6 @@
 import curses
 from pathlib import Path
-
+import sys
 def start_display(paths, conf):
     if len(paths) > 0:
         # INIT curses sesion
@@ -122,7 +122,9 @@ def start_display(paths, conf):
                 open(f'{home}/.qd_path', 'w').write(paths[current_location])
             elif key == ord('q'):
                 quit = True
+                curses.endwin()
+                sys.exit(1)
 
-        curses.endwin()
+
     else:
         print("NO PATHS FOUND")
