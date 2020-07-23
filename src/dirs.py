@@ -1,6 +1,8 @@
 import os
 
-def apply_rules(name, root, conf):
+filtered_paths = []
+
+def apply_rules(name, root, conf, inp):
     path = os.path.join(root, name)
     r = True
     for e in conf.exclude:
@@ -15,6 +17,8 @@ def apply_rules(name, root, conf):
             r = True
     if name in conf.include:
         r = True
+    if inp.lower() in name.lower():
+        filtered_paths.append(path)
     return r
 
 def match_points(match, exact_points, non_exact_points):
@@ -57,7 +61,15 @@ def dist_points(p):
     points *= 300000
     return points - repeat
 
-def get_dirs(name, conf, results=8):
+def walk(dir, conf, inp):
+    with os.scandir(dir) as it:
+        for sub in it:
+            path = os.path.join(dir, sub.name)
+            if sub.is_dir() and apply_rules(sub.name, dir, conf, inp):
+                walk(path, conf, inp)
+    return
+
+def get_dirs(inp, conf, results=8):
     scores = {}
 
     def add_score(path, points):
@@ -66,19 +78,17 @@ def get_dirs(name, conf, results=8):
         else:
             scores[path] = points
 
-    for root, dirs, files in os.walk(conf.root, topdown=True):
-        dirs[:] = list(filter(lambda d: apply_rules(d, root, conf), dirs))
-        for subdir in dirs:
-            path = os.path.join(root, subdir)
-            if name in path:
-                points = match_points(path.split(name), 500000, 480000)
-                if points > 0:
-                    points += dist_points(path)
-                    add_score(path, points)
-            elif name.lower() in path.lower():
-                points = match_points(path.lower().split(name.lower()), 300000, 300000)
-                if points > 0:
-                    points += dist_points(path)
-                    add_score(path, points)
+    walk(conf.root, conf, inp)
+    for path in filtered_paths:
+        if inp in path:
+            points = match_points(path.split(inp), 500000, 480000)
+            if points > 0:
+                points += dist_points(path)
+                add_score(path, points)
+        elif inp.lower() in path.lower():
+            points = match_points(path.lower().split(inp.lower()), 300000, 300000)
+            if points > 0:
+                points += dist_points(path)
+                add_score(path, points)
     dirs = sorted(scores.items(), key=lambda item: -item[1])[:results]
     return list(map(lambda x: x[0], dirs))
