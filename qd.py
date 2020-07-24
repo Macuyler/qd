@@ -13,9 +13,11 @@ def show_usage():
 
 def main():
     help_args = ['--help', '-h']
-    if len(sys.argv) == 2 and sys.argv[1] not in help_args: # Check for argument
+    if len(sys.argv) >= 2 and sys.argv[1] not in help_args: # Check for help argument or if path args is greater then 2
         conf = get_config()
-        dirs = get_dirs(sys.argv[1], conf)
+        #Join path argument from bash script with a space
+        path_arg = ' '.join(sys.argv[1:])
+        dirs = get_dirs(path_arg, conf)
         start_display(dirs, conf)
     else:
         show_usage()

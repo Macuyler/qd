@@ -10,3 +10,7 @@ This is a utility that allows you to quickly jump to your favorite directories w
 alias qd="source qd.sh"
 ```
  - Open up a new terminal and give it a try using `qd`
+
+## Notes:
+ - Windows is not (yet) supported.
+ - It seems that python caches the directories. So, the first time you run the command after boot it takes longer then normal operation.
