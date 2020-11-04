@@ -1,15 +1,29 @@
 import curses
 from pathlib import Path
 import sys
-def start_display(paths, conf):
+def start_display(paths, conf, favorites):
     if len(paths) > 0:
         # INIT curses sesion
-        stdscr = curses.initscr()
+
+        screen = curses.initscr()
+        screen_y, screen_x = screen.getmaxyx()
+
+        if screen_y -4 > 18:
+            screen.addstr(screen_y -2, 4, "q = quit")
+            screen.addstr(screen_y - 3, 4, "f = add to favorites")
+            screen.addstr(screen_y - 4, 4, "ENTR = CD to path")
+
         curses.cbreak()
-        stdscr.keypad(1)
+        curses.noecho()
 
         #get terminal x and y
-        term_y, term_x = stdscr.getmaxyx()
+        term_y, term_x = screen.getmaxyx()
+        box_y = term_y - 4 if term_y - 4 > 8 else term_y
+        box_x = term_x -4 if term_x -4 > 8 else term_x
+        stdscr = curses.newwin(box_y, box_x, 0, 2)
+        stdscr.box()
+        stdscr.keypad(1)
+        screen.refresh()
 
         current_location = 0
 
@@ -73,18 +87,17 @@ def start_display(paths, conf):
 
         def clear_string(index):
             if index < len(paths):
-                stdscr.addch(index, 2, ' ')
-                stdscr.addstr(index, 4, clean_paths[index])
+                stdscr.addch(index +1, 2, ' ')
+                stdscr.addstr(index +1, 4, clean_paths[index])
 
         def select_string(index):
             if index < len(path):
-                line = f">{clean_paths[index]}"
-                stdscr.addch(index, 2, ">")
-                stdscr.addstr(index, 4, clean_paths[index], curses.A_STANDOUT)
+                stdscr.addch(index +1, 2, ">")
+                stdscr.addstr(index +1, 4, clean_paths[index], curses.A_STANDOUT)
                 #stdscr.addstr(index, 0, line, curses.A_STANDOUT)
 
         for index, path in enumerate(clean_paths):
-            stdscr.addstr(index, 4, path)
+            stdscr.addstr(index + 1, 4, path)
 
         key = ''
 
@@ -103,7 +116,7 @@ def start_display(paths, conf):
                     select_string(current_location)
                 else:
                     clear_string(current_location)
-                    current_location = 0
+                    current_location =0
                     select_string(current_location)
             elif key == curses.KEY_UP:
                 if current_location - 1 >= 0 :
@@ -123,7 +136,8 @@ def start_display(paths, conf):
                 quit = True
                 curses.endwin()
                 sys.exit(1)
-
+            elif key == ord('f'):
+                conf.add_to_favorites
 
     else:
         print("NO PATHS FOUND")

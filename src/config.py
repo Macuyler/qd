@@ -23,6 +23,10 @@
 """
 
 from pathlib import Path
+DECLARE_ROOT = 'root='
+DECLARE_HIDDEN = 'hidden_dirs='
+DECLARE_INCLUDE = 'include=['
+DECLARE_EXCLUDE = 'exclude=['
 
 class Config:
     def __init__(self, root='/', hidden=False, include=[], exclude=[]):
@@ -30,13 +34,6 @@ class Config:
         self.hidden = hidden
         self.include = include
         self.exclude = exclude
-        return
-
-
-DECLARE_ROOT = 'root='
-DECLARE_HIDDEN = 'hidden_dirs='
-DECLARE_INCLUDE = 'include=['
-DECLARE_EXCLUDE = 'exclude=['
 
 def get_root(line):
     _, root = line.split(DECLARE_ROOT)
@@ -56,7 +53,6 @@ def get_include(line):
 # TODO: Add [...] syntax to allow appending items to default list
 def get_exclude(line):
     return get_items(line.replace(DECLARE_EXCLUDE, '').strip())
-
 
 def get_config():
     home = str(Path.home())

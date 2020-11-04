@@ -11,6 +11,11 @@ alias qd="source qd.sh"
 ```
  - Open up a new terminal and give it a try using `qd`
 
+## Usage:
+	- "$qd [path to search for]" normal operation
+	- "$qd -ss or --set-shortcut [shortcut key]" set a keyword to a current working directory. Used to quickly cd to dir
+	- "$qd -s --shortcut [shortcut key]" go to shortcut set by command above.
+
 ## Notes:
- - Windows is not (yet) supported.
+ - Windows is not supported.
  - It seems that python caches the directories. So, the first time you run the command after boot it takes longer then normal operation.
