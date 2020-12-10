@@ -22,6 +22,22 @@ def _save_shortcut(name, path):
     with open(json_file_path, 'w') as f:
         json.dump(shortcuts, f)
 
+def remove_shortcut(name):
+    shortcuts = _get_shortcuts()
+    if name not in shortcuts:
+        print("Shortcut " + name + " not found and not removed!")
+        return
+    else:
+        print("removed " + name)
+        del shortcuts[name]
+        with open(json_file_path, 'w') as f:
+            json.dump(shortcuts, f)
+def list_shortcuts():
+    shortcuts = _get_shortcuts()
+    for st in shortcuts:
+        print(f"{st}: {shortcuts[st].replace(home_dir, '')}")
+
+
 def set_shortcut(name, path):
     shortcuts = _get_shortcuts()
 

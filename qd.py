@@ -5,7 +5,7 @@ from os import getcwd
 from src.config import get_config
 from src.dirs import get_dirs
 from src.cli import start_display
-from src.shortcut import set_shortcut, go_to_shortcut
+from src.shortcut import set_shortcut, go_to_shortcut, remove_shortcut, list_shortcuts
 
 
 def show_usage():
@@ -16,6 +16,8 @@ def show_usage():
     print('\t\t\tchange to path associated with a shortcut set with --set-shortcut\n')
     print('\t\t-ss or --set-shortcut [shortcut_name]')
     print('\t\t\tsets shortcut name to current working directory')
+    print("\t\t -rm or --remove-shortcut")
+    print("\t\t -ls or --list-shortcuts")
     return
 
 def main():
@@ -23,6 +25,8 @@ def main():
     favorate_args = ['-f', '--favorites']
     shortcut_args = ['-s', '--shortcut']
     set_shortcut_args = ['-ss', '--set-shortcut']
+    ls_shortcut = ["-ls", "--list-shortcuts"]
+    rm_shortcut = ['-rs', "--remove-shortcut"]
 
 
     if len(sys.argv) >= 2: #check if any other arugments were passed besides 'qd'
@@ -33,6 +37,11 @@ def main():
         if command_arg in help_args:
             show_usage()
             sys.exit(1)
+
+        elif command_arg in ls_shortcut:
+            list_shortcuts()
+        elif command_arg in rm_shortcut and len(sys.argv) >= 3:
+            remove_shortcut(sys.argv[2])
         elif command_arg in shortcut_args and len(sys.argv) >= 3: #this command requires an extra arg
             go_to_shortcut(sys.argv[2])
         elif command_arg in set_shortcut_args and len(sys.argv) >= 3: #requires extra arg

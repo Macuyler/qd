@@ -62,11 +62,15 @@ def dist_points(p):
     return points - repeat
 
 def walk(dir, conf, inp):
-    with os.scandir(dir) as it:
-        for sub in it:
-            path = os.path.join(dir, sub.name)
-            if sub.is_dir() and apply_rules(sub.name, dir, conf, inp):
-                walk(path, conf, inp)
+    #passover directories that user doesn't have permisson too
+    try:
+        with os.scandir(dir) as it:
+            for sub in it:
+                path = os.path.join(dir, sub.name)
+                if sub.is_dir() and apply_rules(sub.name, dir, conf, inp):
+                    walk(path, conf, inp)
+    except PermissionError:
+        pass
     return
 
 def get_dirs(inp, conf, results=8):
